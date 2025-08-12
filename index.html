@@ -4,105 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Zet_9-games</title>
-  <style>
-    /* Сброс отступов и базовые настройки */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #121212;
-      color: #f0f0f0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-      padding: 20px;
-      line-height: 1.6;
-    }
-
-    header {
-      max-width: 900px;
-      width: 100%;
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    header h1 {
-      font-size: 2.8rem;
-      margin-bottom: 0.3em;
-      letter-spacing: 1px;
-      color: #61dafb;
-      text-shadow: 0 0 8px #61dafbaa;
-    }
-
-    header p {
-      font-size: 1.2rem;
-      color: #bbb;
-    }
-
-    main {
-      max-width: 900px;
-      width: 100%;
-      background: #1e1e1e;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.5);
-    }
-
-    .game-title {
-      font-size: 1.6rem;
-      margin-bottom: 15px;
-      color: #61dafb;
-      text-align: center;
-      text-shadow: 0 0 6px #61dafbaa;
-    }
-
-    iframe {
-      display: block;
-      width: 100%;
-      max-width: 800px;
-      height: 600px;
-      border: none;
-      border-radius: 10px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.8);
-      margin: 0 auto;
-    }
-
-    footer {
-      margin-top: auto;
-      padding: 15px 10px;
-      width: 100%;
-      max-width: 900px;
-      text-align: center;
-      font-size: 0.9rem;
-      color: #555;
-      user-select: none;
-    }
-
-    @media (max-width: 850px) {
-      iframe {
-        height: 400px;
-      }
-    }
-
-    @media (max-width: 450px) {
-      header h1 {
-        font-size: 2rem;
-      }
-
-      .game-title {
-        font-size: 1.3rem;
-      }
-
-      iframe {
-        height: 300px;
-      }
-    }
-  </style>
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
 
@@ -112,9 +15,21 @@
   </header>
 
   <main>
-    <section class="game">
-      <h2 class="game-title">Моя первая игра</h2>
-      <iframe src="games/game1/index.html" allowfullscreen></iframe>
+    <div class="video-wrapper">
+      <video id="promoVideo" controls>
+        <source src="videos/promo.mp4" type="video/mp4" />
+        Тег video не поддерживается вашим браузером.
+      </video>
+    </div>
+
+    <section class="games-section">
+      <h2>Игры</h2>
+      <iframe
+        id="gameFrame"
+        class="game-iframe"
+        src="games/game1/index.html"
+        allowfullscreen>
+      </iframe>
     </section>
   </main>
 
@@ -122,5 +37,8 @@
     © 2025 Zet_9-games. Все права защищены.
   </footer>
 
+  <script src="js/videoPlayer.js"></script>
+  <script src="js/gameLoader.js"></script>
+  <script src="js/main.js"></script>
 </body>
 </html>
