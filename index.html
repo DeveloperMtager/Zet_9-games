@@ -112,21 +112,31 @@
 <header>Z9Games</header>
 
 <main>
-  <section class="video-container" aria-label="Промо видео">
-    <video id="promoVideo" controls preload="metadata" poster="videos/poster.jpg">
-      <source src="promo.mp4" type="video/mp4" />
-      Ваш браузер не поддерживает видео.
-    </video>
-  </section>
-
-  <section class="games-container" aria-label="Игры">
-    <iframe id="gameFrame" src="games/game1/index.html" allowfullscreen title="Игровой экран"></iframe>
-  </section>
-</main>
-
-<footer>© 2025 Z9Games. Все права защищены.</footer>
+ <section class="video-container" aria-label="Промо видео">
+  <video id="promoVideo" autoplay muted loop playsinline 
+         style="pointer-events:none;" preload="metadata" poster="poster.jpg">
+    <source src="promo.mp4" type="video/mp4" />
+    Ваш браузер не поддерживает видео.
+  </video>
+</section>
 
 <script>
+  (() => {
+    const video = document.getElementById('promoVideo');
+
+    // Заблокируем попытки поставить видео на паузу
+    video.addEventListener('pause', () => {
+      if (!video.paused) return; // если видео реально не на паузе, игнор
+      video.play();
+    });
+
+    // Заблокируем контекстное меню на видео (правый клик)
+    video.addEventListener('contextmenu', e => e.preventDefault());
+
+    // Запуск видео, если по какой-то причине не стартовало
+    video.play().catch(() => { /* игнорируем ошибку */ });
+  })();
+</script>
   (() => {
     // Кэшируем элементы
     const video = document.getElementById('promoVideo');
