@@ -3,17 +3,13 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Z9Games</title>
+<title>Z9_Games</title>
 <style>
-  /* Reset */
-  *, *::before, *::after {
-    box-sizing: border-box;
-  }
   body {
     margin: 0;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-family: "Segoe UI", sans-serif;
     background: #121212;
-    color: #eee;
+    color: #fff;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -22,187 +18,175 @@
     background: #1f1f1f;
     padding: 15px 30px;
     font-size: 1.8rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    user-select: none;
+    font-weight: bold;
+    border-bottom: 2px solid #00b4d8;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    border-bottom: 2px solid #00b4d8;
   }
   main {
     flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 30px 20px;
-    gap: 40px;
-    background: linear-gradient(135deg, #242424 0%, #121212 100%);
+    padding: 20px;
+    max-width: 1200px;
+    margin: auto;
   }
   .video-container {
-    width: 90%;
     max-width: 900px;
-    box-shadow: 0 8px 20px rgba(0,180,216,0.4);
+    margin: 0 auto 40px;
     border-radius: 12px;
     overflow: hidden;
-    background: black;
-    transition: box-shadow 0.3s ease;
-  }
-  .video-container:hover {
-    box-shadow: 0 12px 30px rgba(0,180,216,0.7);
+    box-shadow: 0 8px 20px rgba(0,180,216,0.4);
   }
   video {
     width: 100%;
-    height: auto;
     display: block;
+    pointer-events: none;
   }
-  .games-container {
-    width: 90%;
-    max-width: 900px;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 8px 20px rgba(0,180,216,0.4);
+  .games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  .game-card {
     background: #1e1e1e;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,180,216,0.3);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
-  iframe {
+  .game-card iframe, .game-card .soon {
     width: 100%;
-    height: 600px;
+    height: 200px;
     border: none;
-    display: block;
+    background: #000;
+  }
+  .game-title {
+    padding: 10px;
+    font-size: 1rem;
+    background: #222;
+    text-align: center;
+  }
+  .soon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+    font-size: 1.2rem;
+  }
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    gap: 10px;
+  }
+  .pagination button {
+    background: #00b4d8;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #fff;
+  }
+  .pagination button.active {
+    background: #0077b6;
+  }
+  .pagination button:hover {
+    background: #0096c7;
   }
   footer {
     background: #1f1f1f;
-    padding: 15px 20px;
+    padding: 10px;
     font-size: 0.9rem;
     text-align: center;
     color: #666;
-    user-select: none;
     border-top: 1px solid #333;
-  }
-
-  /* Адаптив */
-  @media (max-width: 960px) {
-    iframe {
-      height: 450px;
-    }
-  }
-  @media (max-width: 600px) {
-    header {
-      font-size: 1.4rem;
-      padding: 10px 15px;
-    }
-    main {
-      gap: 25px;
-      padding: 20px 15px;
-    }
-    .video-container {
-      max-width: 100%;
-    }
-    .games-container {
-      max-width: 100%;
-    }
-    iframe {
-      height: 320px;
-    }
   }
 </style>
 </head>
 <body>
 
-<header>Z9Games</header>
+<header>Z9_Games</header>
 
 <main>
- <section class="video-container" aria-label="Промо видео">
-  <video id="promoVideo" autoplay muted loop playsinline 
-         style="pointer-events:none;" preload="metadata" poster="poster.jpg">
-    <source src="promo.mp4" type="video/mp4" />
-    Ваш браузер не поддерживает видео.
-  </video>
-</section>
+  <div class="video-container">
+    <video autoplay muted loop playsinline>
+      <source src="promo.mp4" type="video/mp4">
+      Ваш браузер не поддерживает видео.
+    </video>
+  </div>
+
+  <div class="games-grid" id="gamesGrid"></div>
+
+  <div class="pagination" id="pagination"></div>
+</main>
+
+<footer>© 2025 Z9_Games. Все права защищены.</footer>
 
 <script>
-  (() => {
-    const video = document.getElementById('promoVideo');
+  const gamesPerPage = 9; // 9 игр на страницу
+  const games = [
+    { title: "Игра 1", src: "games/game1/index.html" },
+    { title: "Игра 2", src: "games/game2/index.html" },
+    { title: "Игра 3", src: "" },
+    { title: "Игра 4", src: "" },
+    { title: "Игра 5", src: "" },
+    { title: "Игра 6", src: "" },
+    { title: "Игра 7", src: "" },
+    { title: "Игра 8", src: "" },
+    { title: "Игра 9", src: "" },
+    { title: "Игра 10", src: "" },
+    { title: "Игра 11", src: "" },
+    { title: "Игра 12", src: "" },
+    { title: "Игра 13", src: "" }
+  ];
 
-    // Заблокируем попытки поставить видео на паузу
-    video.addEventListener('pause', () => {
-      if (!video.paused) return; // если видео реально не на паузе, игнор
-      video.play();
+  let currentPage = 1;
+
+  function renderGames() {
+    const grid = document.getElementById("gamesGrid");
+    grid.innerHTML = "";
+
+    const start = (currentPage - 1) * gamesPerPage;
+    const end = start + gamesPerPage;
+    const pageGames = games.slice(start, end);
+
+    pageGames.forEach(game => {
+      const card = document.createElement("div");
+      card.classList.add("game-card");
+
+      if (game.src) {
+        card.innerHTML = `<iframe src="${game.src}"></iframe><div class="game-title">${game.title}</div>`;
+      } else {
+        card.innerHTML = `<div class="soon">Скоро</div><div class="game-title">${game.title}</div>`;
+      }
+
+      grid.appendChild(card);
     });
+  }
 
-    // Заблокируем контекстное меню на видео (правый клик)
-    video.addEventListener('contextmenu', e => e.preventDefault());
+  function renderPagination() {
+    const totalPages = Math.ceil(games.length / gamesPerPage);
+    const pagination = document.getElementById("pagination");
+    pagination.innerHTML = "";
 
-    // Запуск видео, если по какой-то причине не стартовало
-    video.play().catch(() => { /* игнорируем ошибку */ });
-  })();
-</script>
-  (() => {
-    // Кэшируем элементы
-    const video = document.getElementById('promoVideo');
-    const gameFrame = document.getElementById('gameFrame');
+    for (let i = 1; i <= totalPages; i++) {
+      const btn = document.createElement("button");
+      btn.textContent = i;
+      if (i === currentPage) btn.classList.add("active");
+      btn.addEventListener("click", () => {
+        currentPage = i;
+        renderGames();
+        renderPagination();
+      });
+      pagination.appendChild(btn);
+    }
+  }
 
-    // Модуль управления видео
-    const VideoController = (() => {
-      let pauseTimeoutId = null;
-
-      function onPlay() {
-        clearTimeout(pauseTimeoutId);
-        pauseTimeoutId = setTimeout(() => {
-          video.pause();
-          console.log('[VideoController] Видео поставлено на паузу через 10 секунд');
-        }, 10000);
-      }
-
-      function init() {
-        if (!video) return;
-        video.addEventListener('play', onPlay);
-      }
-
-      return { init };
-    })();
-
-    // Модуль управления играми
-    const GameController = (() => {
-      // Можно расширить список игр
-      const games = [
-        'games/game1/index.html',
-        'games/game2/index.html',
-      ];
-      let currentGameIndex = 0;
-
-      function loadGame(index) {
-        if (!gameFrame) return;
-        if (index < 0 || index >= games.length) {
-          console.warn('[GameController] Неверный индекс игры:', index);
-          return;
-        }
-        currentGameIndex = index;
-        gameFrame.src = games[currentGameIndex];
-        console.log(`[GameController] Загружена игра: ${games[currentGameIndex]}`);
-      }
-
-      function nextGame() {
-        const nextIndex = (currentGameIndex + 1) % games.length;
-        loadGame(nextIndex);
-      }
-
-      function init() {
-        loadGame(currentGameIndex);
-        // Можно добавить навигацию между играми, кнопки и т.п.
-      }
-
-      return { init, loadGame, nextGame };
-    })();
-
-    // Инициализация при загрузке DOM
-    document.addEventListener('DOMContentLoaded', () => {
-      VideoController.init();
-      GameController.init();
-    });
-  })();
+  renderGames();
+  renderPagination();
 </script>
 
 </body>
 </html>
-
