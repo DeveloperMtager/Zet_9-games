@@ -1,1 +1,114 @@
+/* Общие стили */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #121212;
+  color: #f0f0f0;
+  min-height: 100vh;
+  padding: 20px;
+  line-height: 1.6;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+header {
+  margin-bottom: 20px;
+}
+
+header h1 {
+  font-size: 1.8rem;
+  color: #61dafb;
+  text-shadow: 0 0 6px #61dafbaa;
+  text-align: left;
+  margin-bottom: 5px;
+}
+
+header p {
+  font-size: 1rem;
+  color: #bbb;
+  text-align: left;
+  margin-bottom: 15px;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+.video-wrapper {
+  width: 100%;
+  max-width: 800px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.8);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+video, iframe {
+  width: 100%;
+  height: 450px;
+  border: none;
+  display: block;
+}
+
+.games-section {
+  width: 100%;
+  max-width: 800px;
+  background: #1e1e1e;
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+}
+
+.games-section h2 {
+  color: #61dafb;
+  margin-bottom: 15px;
+  text-shadow: 0 0 6px #61dafbaa;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.game-iframe {
+  width: 100%;
+  height: 600px;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.8);
+  border: none;
+  display: block;
+  margin: 0 auto;
+}
+
+footer {
+  margin-top: auto;
+  padding: 15px 10px;
+  width: 100%;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #555;
+  user-select: none;
+}
+
+@media (max-width: 850px) {
+  video, iframe {
+    height: 300px;
+  }
+  .game-iframe {
+    height: 400px;
+  }
+}
+
+@media (max-width: 450px) {
+  header h1 {
+    font-size: 1.4rem;
+  }
+  .games-section h2 {
+    font-size: 1.2rem;
+  }
+}
 
