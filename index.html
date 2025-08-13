@@ -12,7 +12,7 @@
     color: #fff;
     display: flex;
     flex-direction: column;
-    height: 100vh; /* можно заменить на 100% */
+    height: 100vh;
     min-height: 100%;
   }
 
@@ -24,25 +24,27 @@
     border-bottom: 2px solid #00b4d8;
     display: flex;
     align-items: center;
-    justify-content: space-between; /* чтобы контент слева и справа */
+    justify-content: space-between;
     position: relative;
   }
-  /* Левая часть хедера */
+
   header > .logo {
     user-select: none;
   }
-  /* Правая часть с кнопками и иконкой */
-  header .header-right {
+
+  .header-right {
     display: flex;
     align-items: center;
     gap: 8px;
   }
-  header .telegram-icon {
+
+  .telegram-icon {
     width: 24px;
     height: 24px;
     display: inline-block;
-    margin-right: 6px; /* сдвигаем чуть влево от кнопок */
+    margin-right: 6px;
   }
+
   header button {
     background: #00b4d8;
     border: none;
@@ -55,8 +57,18 @@
     transition: background 0.3s;
     white-space: nowrap;
   }
+
   header button:hover {
     background: #0096c7;
+  }
+
+  .user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    user-select: none;
+    border: 2px solid #00b4d8;
   }
 
   main {
@@ -140,18 +152,17 @@
     border-top: 1px solid #333;
   }
 
-  /* --- Мобильная адаптация --- */
   @media (max-width: 768px) {
     .video-container {
       max-width: 100%;
     }
     .games-grid {
-      grid-template-columns: repeat(2, 1fr); /* по 2 игры в ряд */
+      grid-template-columns: repeat(2, 1fr);
     }
     .game-card iframe, .game-card .soon {
       height: 160px;
     }
-    header .telegram-icon {
+    .telegram-icon {
       width: 20px;
       height: 20px;
       margin-right: 4px;
@@ -169,19 +180,19 @@
   <div class="logo">Z9_Games</div>
   <div class="header-right">
     <a href="https://t.me/Z9_Games" target="_blank" title="Telegram">
-      <img src="telegram-icon.webp" alt="Telegram" class="telegram-icon">
+      <img src="telegram-icon.webp" alt="Telegram" class="telegram-icon" />
     </a>
     <button id="googleRegisterBtn">Регистрация</button>
     <button id="googleLoginBtn">Войти</button>
     <button id="logoutBtn" style="display:none;">Выйти</button>
-    <span id="userInfo" style="margin-left: 10px;"></span>
+    <img id="userAvatar" class="user-avatar" style="display:none;" alt="Аватар пользователя" />
   </div>
 </header>
 
 <main>
   <div class="video-container">
     <video autoplay muted loop playsinline>
-      <source src="promo.mp4" type="video/mp4">
+      <source src="promo.mp4" type="video/mp4" />
       Ваш браузер не поддерживает видео.
     </video>
   </div>
@@ -210,14 +221,14 @@
     { title: "Игра 13", src: "" }
   ];
 
-  let gamesPerPage = 9; // по умолчанию для ПК
+  let gamesPerPage = 9;
   let currentPage = 1;
 
   function updateGamesPerPage() {
     if (window.innerWidth <= 768) {
-      gamesPerPage = 6; // на мобилке по 6 игр на страницу
+      gamesPerPage = 6;
     } else {
-      gamesPerPage = 9; // на ПК по 9
+      gamesPerPage = 9;
     }
   }
 
@@ -256,7 +267,7 @@
         currentPage = i;
         renderGames();
         renderPagination();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo({ top: 0, behavior: "smooth" });
       });
       pagination.appendChild(btn);
     }
@@ -265,7 +276,6 @@
   function renderAll() {
     updateGamesPerPage();
 
-    // если текущая страница уже невалидна из-за смены количества игр на странице - сбросить на 1
     const totalPages = Math.ceil(games.length / gamesPerPage);
     if (currentPage > totalPages) currentPage = 1;
 
@@ -273,7 +283,7 @@
     renderPagination();
   }
 
-  window.addEventListener('resize', () => {
+  window.addEventListener("resize", () => {
     const oldGamesPerPage = gamesPerPage;
     updateGamesPerPage();
     if (oldGamesPerPage !== gamesPerPage) {
@@ -287,8 +297,13 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-  import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } 
-    from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+  import {
+    getAuth,
+    GoogleAuthProvider,
+    signInWithPopup,
+    signOut,
+    onAuthStateChanged
+  } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyArkJ5GZaMEANbXr8XwTvbT6ATFfZ-d72U",
@@ -304,34 +319,44 @@
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
 
-  document.getElementById("googleLoginBtn").onclick = () => {
+  const loginBtn = document.getElementById("googleLoginBtn");
+  const regBtn = document.getElementById("googleRegisterBtn");
+  const logoutBtn = document.getElementById("logoutBtn");
+  const userAvatar = document.getElementById("userAvatar");
+
+  loginBtn.onclick = () => {
     signInWithPopup(auth, provider).catch(console.error);
   };
 
-  document.getElementById("googleRegisterBtn").onclick = () => {
+  regBtn.onclick = () => {
     signInWithPopup(auth, provider).catch(console.error);
   };
 
-  document.getElementById("logoutBtn").onclick = () => {
+  logoutBtn.onclick = () => {
     signOut(auth).catch(console.error);
   };
 
   onAuthStateChanged(auth, user => {
-    const info = document.getElementById("userInfo");
-    const logoutBtn = document.getElementById("logoutBtn");
-    const loginBtn = document.getElementById("googleLoginBtn");
-    const regBtn = document.getElementById("googleRegisterBtn");
-
     if (user) {
-      info.textContent = `Привет, ${user.displayName}`;
-      logoutBtn.style.display = "inline-block";
+      // Скрываем кнопки входа и регистрации
       loginBtn.style.display = "none";
       regBtn.style.display = "none";
+      logoutBtn.style.display = "inline-block";
+
+      // Показываем аватар, если есть
+      if (user.photoURL) {
+        userAvatar.src = user.photoURL;
+        userAvatar.style.display = "inline-block";
+      } else {
+        userAvatar.style.display = "none";
+      }
     } else {
-      info.textContent = "";
-      logoutBtn.style.display = "none";
+      // Пользователь не вошёл
       loginBtn.style.display = "inline-block";
       regBtn.style.display = "inline-block";
+      logoutBtn.style.display = "none";
+      userAvatar.style.display = "none";
+      userAvatar.src = "";
     }
   });
 </script>
