@@ -26,10 +26,13 @@
     align-items: center;
     justify-content: space-between; /* чтобы контент слева и справа */
     position: relative;
+    box-sizing: border-box;
   }
   /* Левая часть хедера */
   header > .logo {
     user-select: none;
+    /* чтобы логотип не сжимался слишком сильно */
+    flex-shrink: 0;
   }
   /* Правая часть с кнопками и иконкой */
   header .header-right {
@@ -53,6 +56,7 @@
     color: #fff;
     user-select: none;
     transition: background 0.3s;
+    white-space: nowrap;
   }
   header button:hover {
     background: #0096c7;
@@ -141,6 +145,37 @@
 
   /* --- Мобильная адаптация --- */
   @media (max-width: 768px) {
+    header {
+      flex-wrap: wrap; /* Позволит переносить элементы на новую строку */
+      padding: 10px 15px;
+    }
+    .header-right {
+      gap: 6px; /* Уменьшим отступы между элементами */
+      flex-wrap: wrap; /* чтобы кнопки и иконка переносились */
+      justify-content: flex-end;
+      align-items: center;
+    }
+    header .telegram-icon {
+      width: 24px;
+      height: 24px;
+      margin-right: 6px;
+    }
+    header button {
+      padding: 5px 10px;
+      font-size: 0.9rem;
+      white-space: nowrap; /* чтобы кнопки не переносились по словам */
+    }
+    /* Ограничим ширину поля с именем пользователя и добавим обрезку */
+    #userInfo {
+      margin-left: 10px;
+      max-width: 140px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      display: inline-block;
+      font-size: 0.95rem;
+      color: #cfeff9;
+    }
     .video-container {
       max-width: 100%;
     }
@@ -149,6 +184,30 @@
     }
     .game-card iframe, .game-card .soon {
       height: 160px;
+    }
+  }
+
+  /* Доп. правки для очень узких экранов */
+  @media (max-width: 480px) {
+    header {
+      padding: 8px 10px;
+    }
+    header .telegram-icon {
+      width: 20px;
+      height: 20px;
+      margin-right: 6px;
+    }
+    header button {
+      padding: 4px 8px;
+      font-size: 0.85rem;
+    }
+    #userInfo {
+      max-width: 90px;
+      font-size: 0.85rem;
+    }
+    .logo {
+      font-size: 1.4rem;
+      margin-bottom: 4px; /* если логотип переносится на новую строку — немного пространства */
     }
   }
 </style>
@@ -300,6 +359,3 @@
 
 </body>
 </html>
-
-
-
