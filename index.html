@@ -22,14 +22,40 @@
     border-bottom: 2px solid #00b4d8;
     display: flex;
     align-items: center;
-    justify-content: space-between; /* чтобы иконка ушла вправо */
+    justify-content: space-between; /* чтобы контент слева и справа */
     position: relative;
+  }
+  /* Левая часть хедера */
+  header > .logo {
+    user-select: none;
+  }
+  /* Правая часть с кнопками и иконкой */
+  header .header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
   header .telegram-icon {
     width: 32px;
     height: 32px;
     display: inline-block;
+    margin-right: 10px; /* сдвигаем чуть влево от кнопок */
   }
+  header button {
+    background: #00b4d8;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #fff;
+    user-select: none;
+    transition: background 0.3s;
+  }
+  header button:hover {
+    background: #0096c7;
+  }
+
   main {
     flex-grow: 1;
     padding: 20px;
@@ -128,10 +154,16 @@
 <body>
 
 <header>
-  Z9_Games
-  <a href="https://t.me/Z9_Games" target="_blank">
-    <img src="telegram-icon.webp" alt="Telegram" class="telegram-icon">
-  </a>
+  <div class="logo">Z9_Games</div>
+  <div class="header-right">
+    <a href="https://t.me/Z9_Games" target="_blank" title="Telegram">
+      <img src="telegram-icon.webp" alt="Telegram" class="telegram-icon">
+    </a>
+    <button id="googleRegisterBtn">Регистрация</button>
+    <button id="googleLoginBtn">Войти</button>
+    <button id="logoutBtn" style="display:none;">Выйти</button>
+    <span id="userInfo" style="margin-left: 10px;"></span>
+  </div>
 </header>
 
 <main>
@@ -211,6 +243,57 @@
 
   renderGames();
   renderPagination();
+</script>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } 
+    from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyArkJ5GZaMEANbXr8XwTvbT6ATFfZ-d72U",
+    authDomain: "zet-9-games.firebaseapp.com",
+    projectId: "zet-9-games",
+    storageBucket: "zet-9-games.firebasestorage.app",
+    messagingSenderId: "607520373391",
+    appId: "1:607520373391:web:be8976f770056a6a33cefa",
+    measurementId: "G-H7XBP8XFBB"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+
+  document.getElementById("googleLoginBtn").onclick = () => {
+    signInWithPopup(auth, provider).catch(console.error);
+  };
+
+  document.getElementById("googleRegisterBtn").onclick = () => {
+    signInWithPopup(auth, provider).catch(console.error);
+  };
+
+  document.getElementById("logoutBtn").onclick = () => {
+    signOut(auth).catch(console.error);
+  };
+
+  onAuthStateChanged(auth, user => {
+    const info = document.getElementById("userInfo");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const loginBtn = document.getElementById("googleLoginBtn");
+    const regBtn = document.getElementById("googleRegisterBtn");
+
+    if (user) {
+      info.textContent = `Привет, ${user.displayName}`;
+      logoutBtn.style.display = "inline-block";
+      loginBtn.style.display = "none";
+      regBtn.style.display = "none";
+    } else {
+      info.textContent = "";
+      logoutBtn.style.display = "none";
+      loginBtn.style.display = "inline-block";
+      regBtn.style.display = "inline-block";
+    }
+  });
 </script>
 
 </body>
