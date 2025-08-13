@@ -22,6 +22,13 @@
     border-bottom: 2px solid #00b4d8;
     display: flex;
     align-items: center;
+    justify-content: space-between; /* чтобы иконка ушла вправо */
+    position: relative;
+  }
+  header .telegram-icon {
+    width: 32px;
+    height: 32px;
+    display: inline-block;
   }
   main {
     flex-grow: 1;
@@ -103,11 +110,29 @@
     color: #666;
     border-top: 1px solid #333;
   }
+
+  /* --- Мобильная адаптация --- */
+  @media (max-width: 768px) {
+    .video-container {
+      max-width: 100%;
+    }
+    .games-grid {
+      grid-template-columns: repeat(2, 1fr); /* по 2 игры в ряд */
+    }
+    .game-card iframe, .game-card .soon {
+      height: 160px;
+    }
+  }
 </style>
 </head>
 <body>
 
-<header>Z9_Games</header>
+<header>
+  Z9_Games
+  <a href="https://t.me/Z9_Games" target="_blank">
+    <img src="telegram-icon.webp" alt="Telegram" class="telegram-icon">
+  </a>
+</header>
 
 <main>
   <div class="video-container">
@@ -190,5 +215,3 @@
 
 </body>
 </html>
-
-
